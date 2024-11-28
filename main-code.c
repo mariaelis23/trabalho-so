@@ -93,8 +93,17 @@ int validar_usuario() {
         }
     }
 
-    printf("Usuário não encontrado.\n");
     fclose(arquivo);
+
+    // Se chegar aqui, o usuário não foi encontrado
+    printf("Usuário não encontrado. Deseja cadastrar este usuário? (s/n): ");
+    char opcao;
+    scanf(" %c", &opcao); // Espaço antes do %c para ignorar o '\n'
+    if (opcao == 's' || opcao == 'S') {
+        registrar_usuario();
+        return 1;
+    }
+
     return 0;
 }
 
@@ -130,9 +139,9 @@ void iniciar_shell() {
             break;
         } else if (strncmp(entrada, "listar", 6) == 0) {
             executar_processo("ls");
-        } else if (strncmp(entrada, "criar arquivo", 13) == 0) {
+        } else if (strncmp(entrada, "criar arquivo ", 14) == 0) {
             char nome_arquivo[50];
-            sscanf(entrada, "criar arquivo %s", nome_arquivo);
+            sscanf(entrada + 14, "%s", nome_arquivo);
             FILE *arquivo = fopen(nome_arquivo, "w");
             if (arquivo) {
                 fprintf(arquivo, "Conteúdo gerado automaticamente.\n");
@@ -141,25 +150,25 @@ void iniciar_shell() {
             } else {
                 perror("Erro ao criar arquivo");
             }
-        } else if (strncmp(entrada, "apagar arquivo", 14) == 0) {
+        } else if (strncmp(entrada, "apagar arquivo ", 15) == 0) {
             char nome_arquivo[50];
-            sscanf(entrada, "apagar arquivo %s", nome_arquivo);
+            sscanf(entrada + 15, "%s", nome_arquivo);
             if (remove(nome_arquivo) == 0) {
                 printf("Arquivo '%s' apagado com sucesso.\n", nome_arquivo);
             } else {
                 perror("Erro ao apagar arquivo");
             }
-        } else if (strncmp(entrada, "criar diretorio", 15) == 0) {
+        } else if (strncmp(entrada, "criar diretorio ", 16) == 0) {
             char nome_diretorio[50];
-            sscanf(entrada, "criar diretorio %s", nome_diretorio);
+            sscanf(entrada + 16, "%s", nome_diretorio);
             if (mkdir(nome_diretorio, 0777) == 0) {
                 printf("Diretório '%s' criado com sucesso.\n", nome_diretorio);
             } else {
                 perror("Erro ao criar diretório");
             }
-        } else if (strncmp(entrada, "apagar diretorio", 16) == 0) {
+        } else if (strncmp(entrada, "apagar diretorio ", 17) == 0) {
             char nome_diretorio[50];
-            sscanf(entrada, "apagar diretorio %s", nome_diretorio);
+            sscanf(entrada + 17, "%s", nome_diretorio);
             if (rmdir(nome_diretorio) == 0) {
                 printf("Diretório '%s' apagado com sucesso.\n", nome_diretorio);
             } else {
